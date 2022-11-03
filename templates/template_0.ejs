@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Reset CSS */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+
+      body {
+        padding: 3rem;
+        font-size: 11px;
+      }
+      header {
+        margin-bottom: 4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <svg
+        width="50px"
+        height="50px"
+        viewBox="0 0 50 39"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xml:space="preserve"
+        xmlns:serif="http://www.serif.com/"
+        style="
+          fill-rule: evenodd;
+          clip-rule: evenodd;
+          stroke-linejoin: round;
+          stroke-miterlimit: 2;
+        "
+      >
+        <g transform="matrix(1.13287,0,0,1.13287,-9.15919,15.8167)">
+          <text
+            x="4.597px"
+            y="19.927px"
+            style="
+              font-family: Ubuntu-Bold, Ubuntu, sans-serif;
+              font-weight: 700;
+              font-size: 48px;
+              fill: rgb(51, 66, 91);
+            "
+          >
+            D
+          </text>
+          <text
+            x="38.053px"
+            y="19.927px"
+            style="
+              font-family: Ubuntu-Bold, Ubuntu, sans-serif;
+              font-weight: 700;
+              font-size: 48px;
+              fill: rgb(91, 170, 236);
+            "
+          >
+            .
+          </text>
+        </g>
+      </svg>
+    </header>
+    <p><%= data.content %></p>
+    <p style="margin-top: 3rem"><%= data.location %>, <%= data.date %></p>
+  </body>
+</html>
