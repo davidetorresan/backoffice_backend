@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import Doc from "../models/doc.model";
-import { ICreate } from "../interfaces/doc.interface";
+import { ICreate, IDoc } from "../interfaces/doc.interface";
 import { pdfOptions } from "../config/doc";
 import ejs from "ejs";
 import pdf from "html-pdf";
+import { Error } from "mongoose";
+import * as fs from "fs";
 
 export const routeWelcome = (_req: Request, _res: Response) => {
   _res.status(200).json({
@@ -65,6 +67,73 @@ export const createDoc = (_req: Request, _res: Response) => {
     return _res.status(501).json({
       status: 501,
       error: "No doc informations are provided",
+    });
+  }
+};
+
+export const deleteDoc = (_req: Request, _res: Response) => {
+  if (!_req.body.id)
+    return _res.status(501).json({
+      status: 501,
+      error: "No doc id provided",
+    });
+  Doc.deleteOne({ _id: _req.body.id }, (err: Error, result: IDoc) => {
+    if (err) {
+      return _res.status(501).json({
+        status: 501,
+        error: "Some problems with your request",
+      });
+    } else {
+      fs.rm(result.path as string, (err) => {
+        if (err) {
+          return _res.status(501).json({
+            status: 501,
+            error: "Some problems with your request",
+          });
+        } else {
+          _res.status(201).json({
+            status: 201,
+            message: "Operation successfully performed",
+          });
+        }
+      });
+    }
+  });
+};
+
+export const getDoc = async (_req: Request, _res: Response) => {
+  if (!_req.body.id)
+    return _res.status(501).json({
+      status: 501,
+      error: "No doc id provided",
+    });
+  const doc = await Doc.findOne({ _id: _req.body.id });
+  if (doc) {
+    _res.status(201).json({
+      status: 201,
+      message: "Operation successfully performed",
+      doc,
+    });
+  } else {
+    return _res.status(501).json({
+      status: 501,
+      error: "No doc found",
+    });
+  }
+};
+
+export const listDocs = async (_req: Request, _res: Response) => {
+  const docs: IDoc[] = await Doc.find();
+  if (docs.length) {
+    _res.status(201).json({
+      status: 201,
+      message: "Operation successfully performed",
+      docs,
+    });
+  } else {
+    return _res.status(501).json({
+      status: 501,
+      error: "No docs found",
     });
   }
 };
