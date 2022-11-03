@@ -45,19 +45,18 @@ export const createDoc = (_req: Request, _res: Response) => {
                     type: body.type,
                     name: `${body.type}_${now}.pdf`,
                   });
-                  await newDoc.save();
+                  const resultDoc = await newDoc.save();
+                  _res.status(201).json({
+                    status: 201,
+                    message: "Operation successfully performed",
+                    doc: resultDoc,
+                  });
                 } catch (err) {
                   return _res.status(501).json({
                     status: 501,
                     error: err,
                   });
                 }
-
-                _res.status(201).json({
-                  status: 201,
-                  message: "Operation successfully performed",
-                  doc: result,
-                });
               }
             });
         }
@@ -72,20 +71,20 @@ export const createDoc = (_req: Request, _res: Response) => {
 };
 
 export const deleteDoc = (_req: Request, _res: Response) => {
-  if (!_req.body.id)
+  if (!_req.params.id)
     return _res.status(501).json({
       status: 501,
       error: "No doc id provided",
     });
-  Doc.deleteOne({ _id: _req.body.id }, (err: Error, result: IDoc) => {
+  Doc.deleteOne({ _id: _req.params.id }, (err: Error, result: IDoc) => {
     if (err) {
       return _res.status(501).json({
         status: 501,
         error: "Some problems with your request",
       });
     } else {
-      fs.rm(result.path as string, (err) => {
-        if (err) {
+      fs.rm(result.path as string, (err2) => {
+        if (err2) {
           return _res.status(501).json({
             status: 501,
             error: "Some problems with your request",
@@ -102,12 +101,12 @@ export const deleteDoc = (_req: Request, _res: Response) => {
 };
 
 export const getDoc = async (_req: Request, _res: Response) => {
-  if (!_req.body.id)
+  if (!_req.params.id)
     return _res.status(501).json({
       status: 501,
       error: "No doc id provided",
     });
-  const doc = await Doc.findOne({ _id: _req.body.id });
+  const doc = await Doc.findOne({ _id: _req.params.id });
   if (doc) {
     _res.status(201).json({
       status: 201,

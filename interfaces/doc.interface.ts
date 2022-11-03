@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose";
+
 export interface ICreate {
   createdBy: string;
   title: string;
@@ -6,8 +8,6 @@ export interface ICreate {
 }
 
 export interface IDoc {
-  _id: string;
-  __v: number;
   createdBy: string;
   title: string;
   data: Object;
